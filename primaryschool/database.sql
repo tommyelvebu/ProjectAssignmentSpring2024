@@ -20,28 +20,24 @@ CREATE TABLE class
 
 CREATE TABLE student
 (
-  student_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   student_name TEXT NOT NULL UNIQUE,
+  student_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   class_id INTEGER NOT NULL,
   FOREIGN KEY (class_id) REFERENCES class(class_id)
 );
 
-CREATE TABLE study
+CREATE TABLE preference
 (
-  course_id INTEGER NOT NULL,
+  course_id INTEGER NOT NULL ,
   student_id INTEGER NOT NULL,
-  PRIMARY KEY (course_id, student_id),
-  FOREIGN KEY (course_id) REFERENCES course(course_id),
-  FOREIGN KEY (student_id) REFERENCES student(student_id)
-);
 
-CREATE TABLE preferences
-(
-  preference_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  student_id INTEGER NOT NULL,
-  preferred_student_id INTEGER NOT NULL,
-  preference_rank INTEGER NOT NULL CHECK (preference_rank IN (1, 2, 3)),
-  UNIQUE (student_id, preferred_student_id, preference_rank),
+
+  prefererence_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  preference_rank INTEGER NOT NULL CHECK 
+  
+  
+  (preference_rank IN (1, 2, 3)),
+  UNIQUE (student_id, course_id, preference_rank),
   FOREIGN KEY (student_id) REFERENCES student(student_id),
-  FOREIGN KEY (preferred_student_id) REFERENCES student(student_id)
+  FOREIGN KEY (course_id) REFERENCES course(course_id)
 );
