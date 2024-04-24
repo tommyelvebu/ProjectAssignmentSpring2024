@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+
+{% block title %}Questionnaire{% endblock %}
+
+{% block main %}
+<div class="container my-5">
+  <h2 class="mb-4">Questionnaire Form</h2>
+  <form action="{{ url_for('questionnaire') }}" method="post">
+    <div class="mb-3">
+      <label for="question1" class="form-label">Question 1</label>
+      <input type="text" class="form-control" id="question1" name="question1" placeholder="Enter answer here">
+    </div>
+    <div class="mb-3">
+      <label for="question2" class="form-label">Question 2</label>
+      <select class="form-select" id="question2" name="question2">
+        <option selected>Choose an option</option>
+        <option value="Option 1">Option 1</option>
+        <option value="Option 2">Option 2</option>
+        <option value="Option 3">Option 3</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}

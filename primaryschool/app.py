@@ -28,7 +28,7 @@ def home():
 @app.route('/questionnaire', methods=['GET', 'POST'])
 def questionnaire():
     if request.method == 'POST':
-        return redirect(url_for('thank_you')) 
+        return redirect(url_for('thank_you'))
     return render_template('questionnaire.html')
 
 
