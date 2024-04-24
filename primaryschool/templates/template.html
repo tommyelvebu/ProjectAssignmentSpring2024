@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+  <title>{% block title %}{% endblock %} | Intersting Questionnaire</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="d-flex flex-column h-100">
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-bi-medium-blue">
+  <div class="container-lg">
+    <a class="navbar-brand" href="{{ url_for('home') }}">Overview</a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ url_for('questionnaire') }}"><i class="fa-solid fa-calendar-check"></i> Questionnaire</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ url_for('summary') }}"><i class="fa-solid fa-sack-dollar"></i> Summary</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+{% block main %}
+{% endblock %}
+
+<footer class="mt-auto py-3 bg-light">
+  <div class="container-lg text-center text-muted">
+    <span>&copy; 2024 Only A group</span>
+  </div>
+</footer>
+
+</body>
+</html>
