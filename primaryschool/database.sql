@@ -60,12 +60,10 @@ INSERT INTO class (class_name, teacher_id) VALUES
 ('1B', 2), 
 ('1C', 3);
 
-
-
 INSERT INTO student (student_name, class_id) VALUES 
-('Jin Soo Kim', 1), ('Ming Yue', 1), ('Haruto Watanabe', 1), ('An Dang', 1), ('Hye Jin Lee', 1),
-('Chen Wei', 1), ('Suki Moto', 1), ('Yuki Tanaka', 1), ('Hiroshi Yamamoto', 1), ('Mei Lin', 1),
-('David Obi', 2), ('Nia Miriam', 2), ('Kamau Wanjiru', 2), ('Zola Adeola', 2), ('Femi Hassan', 2),
-('Amara Chibuzo', 2), ('Chike Okonkwo', 2), ('Isioma Jelani', 2), ('Makena Onyango', 2), ('Sade Folami', 2),
-('Magnus Lothe', 3), ('Nora Espeland', 3), ('Oskar Nilsen', 3), ('Sigrid Solberg', 3), ('Emil Iversen', 3),
-('Lily Andersen', 3), ('Mathias Hovde', 3), ('Ella Halvorsen', 3), ('Thea Fosse', 3), ('Lucas Moe', 3);
+('Jin Soo Kim', 1), ('David Obi', 1), ('Magnus Lothe', 1), ('An Dang', 1), ('Nia Miriam', 1),
+('Chen Wei', 1), ('Kamau Wanjiru', 1), ('Nora Espeland', 1), ('Hiroshi Yamamoto', 1), ('Chike Okonkwo', 1),
+('Oskar Nilesen', 2), ('Ming Yue', 2), ('Zola Adeola', 2), ('Sigrid Soldberg', 2), ('Haruto Watanabe', 2),
+('Femi Hassan', 2), ('Emil Iversen', 2), ('Hye Jin Lee', 2), ('Amara Chibuzo', 2), ('Lily Andersen', 2),
+('Suki Moto', 3), ('Isioma Jelani', 3), ('Mathias Hovde', 3), ('Yuki Tanaka', 3), ('Makena Onyango', 3),
+('Sade Folami', 3), ('Ella Halvorsen', 3), ('Mei Lin', 3), ('Thea Fosse', 3), ('Lucas Moe', 3);
