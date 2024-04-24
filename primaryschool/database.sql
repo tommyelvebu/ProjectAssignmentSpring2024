@@ -30,13 +30,8 @@ CREATE TABLE preference
 (
   course_id INTEGER NOT NULL ,
   student_id INTEGER NOT NULL,
-
-
   prefererence_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  preference_rank INTEGER NOT NULL CHECK 
-  
-  
-  (preference_rank IN (1, 2, 3)),
+  preference_rank INTEGER NOT NULL CHECK (preference_rank IN (1, 2, 3)),
   UNIQUE (student_id, course_id, preference_rank),
   FOREIGN KEY (student_id) REFERENCES student(student_id),
   FOREIGN KEY (course_id) REFERENCES course(course_id)
