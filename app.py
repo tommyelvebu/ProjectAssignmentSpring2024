@@ -6,6 +6,8 @@ import re
 DATABASE = 'database.db'
 
 app = Flask(__name__)
+app.secret_key = 'a1b2c3d4e5f6g7h8i9j0'
+
 
 
 def get_db():
@@ -32,16 +34,44 @@ def home():
 def questionnaire():
     db = get_db()
     if request.method == 'POST':
-        # Here you will handle form submission and save data to the database
-        # Example: Process the received data and potentially return a thank you page
-        return redirect(url_for('thank_you'))
+        student_id = request.form.get('student_id')
+        teacher_id = request.form.get('teacher_id')
+
+        # Fetch the class_id for the selected student
+        student_class = db.execute(
+            'SELECT class_id FROM student WHERE student_id = ?',
+            (student_id,)
+        ).fetchone()
+
+        # Fetch the class_id for the selected teacher
+        teacher_class = db.execute(
+            'SELECT class_id FROM class WHERE teacher_id = ?',
+            (teacher_id,)
+        ).fetchall()  # Teacher might be associated with multiple classes; adjust logic if teachers are restricted to one class.
+
+        # Validate if the student's class is one of the teacher's classes
+        if student_class and teacher_class:
+            teacher_class_ids = [tc['class_id'] for tc in teacher_class]
+            if student_class['class_id'] in teacher_class_ids:
+                # Proceed with form processing and saving data
+                return redirect(url_for('thank_you'))
+            else:
+                # Handling the error: Student does not belong to the teacher's class
+                flash('The selected student does not belong to the specified teacher’s class.', 'error')
+        else:
+            # Handle possible errors if no records are found
+            flash('Invalid student or teacher selected.', 'error')
+
+        # If validation fails, re-render the form with previously submitted values
+        return redirect(url_for('questionnaire'))
+
     else:
         # Fetch data from database to populate form
         teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
         courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
         students = db.execute('SELECT student_id, student_name FROM student').fetchall()
-        # You may want to fetch students again or structure differently for preferences
         return render_template('questionnaire.html', teachers=teachers, courses=courses, students=students)
+
 
 
 
