@@ -15,35 +15,65 @@
   {% endwith %}
   <h2 class="mb-4">Questionnaire Form</h2>
   <form action="{{ url_for('questionnaire') }}" method="post">
-    <!-- Student's Identity -->
+
     <div class="mb-3">
       <label for="student_id" class="form-label">Student's Name</label>
       <select class="form-select" id="student_id" name="student_id">
+        <option value="">Select a student</option>
         {% for student in students %}
         <option value="{{ student.student_id }}">{{ student.student_name }}</option>
         {% endfor %}
       </select>
     </div>
-    <!-- Homeroom Teacher's Identity -->
+
     <div class="mb-3">
       <label for="teacher_id" class="form-label">Homeroom Teacher</label>
       <select class="form-select" id="teacher_id" name="teacher_id">
+        <option value="">Select a teacher</option>
         {% for teacher in teachers %}
         <option value="{{ teacher.teacher_id }}">{{ teacher.teacher_name }}</option>
         {% endfor %}
       </select>
     </div>
-    <!-- Favorite Course -->
+
     <div class="mb-3">
       <label for="course_id" class="form-label">Favorite Course</label>
       <select class="form-select" id="course_id" name="course_id">
+        <option value="">Select a course</option>
         {% for course in courses %}
         <option value="{{ course.course_id }}">{{ course.course_name }}</option>
         {% endfor %}
       </select>
     </div>
-    <!-- 1st, 2nd, 3rd Preferred Partners -->
-    <!-- Implementation for preferred partners can be added similarly -->
+
+    <div class="mb-3">
+      <label for="preferred1" class="form-label">1st Preferred Partner</label>
+      <select class="form-select" id="preferred1" name="preferred1">
+        <option value="">Select a student</option>
+        {% for student in students %}
+        <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="preferred2" class="form-label">2nd Preferred Partner</label>
+      <select class="form-select" id="preferred2" name="preferred2">
+        <option value="">Select a student</option>
+        {% for student in students %}
+        <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="preferred3" class="form-label">3rd Preferred Partner</label>
+      <select class="form-select" id="preferred3" name="preferred3">
+        <option value="">Select a student</option>
+        {% for student in students %}
+        <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>

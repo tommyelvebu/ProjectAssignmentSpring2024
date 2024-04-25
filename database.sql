@@ -38,7 +38,7 @@ CREATE TABLE preference
 );
 
 
--- inserting authentic asian, african and norwegian names, along with dropdown values
+
 
 INSERT INTO teacher (teacher_name) VALUES 
 ('Lei Chang'), 
