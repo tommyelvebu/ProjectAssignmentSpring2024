@@ -36,7 +36,8 @@ CREATE TABLE preference
   FOREIGN KEY (student_id) REFERENCES student(student_id),
   FOREIGN KEY (course_id) REFERENCES course(course_id)
 );
-
+-- i also added the preferred_student_id directly in the database, referencing student(student_id)
+-- this was to have a column to store the student_id of the preferred students
 
 
 

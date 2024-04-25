@@ -47,12 +47,12 @@ def questionnaire():
             return redirect(url_for('questionnaire'))
 
         try:
-            db.execute('INSERT INTO preference (student_id, course_id, preference_rank, preference_id) VALUES (?, ?, ?)',
-                       (student_id, course_id, 1), preferred1)  
-            db.execute('INSERT INTO preference (student_id, course_id, preference_rank, preference_id) VALUES (?, ?, ?)',
-                       (student_id, course_id, 2), preferred2)  
-            db.execute('INSERT INTO preference (student_id, course_id, preference_rank, preference_id) VALUES (?, ?, ?)',
-                       (student_id, course_id, 3), preferred3) 
+            db.execute('INSERT INTO preference (student_id, course_id, preference_rank, preferred_student_id) VALUES (?, ?, 1, ?)',
+                       (student_id, course_id, preferred1))
+            db.execute('INSERT INTO preference (student_id, course_id, preference_rank, preferred_student_id) VALUES (?, ?, 2, ?)',
+                       (student_id, course_id, preferred2))
+            db.execute('INSERT INTO preference (student_id, course_id, preference_rank, preferred_student_id) VALUES (?, ?, 3, ?)',
+                       (student_id, course_id, preferred3))
             db.commit()
         except sqlite3.IntegrityError as e:
             flash('There was an error saving your preferences. Please try again.', 'error')
@@ -65,6 +65,7 @@ def questionnaire():
         teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
         courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
         return render_template('questionnaire.html', students=students, teachers=teachers, courses=courses)
+
 
 
 
