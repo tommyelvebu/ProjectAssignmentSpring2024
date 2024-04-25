@@ -30,9 +30,15 @@ def home():
 
 @app.route('/questionnaire', methods=['GET', 'POST'])
 def questionnaire():
+    db = get_db()
     if request.method == 'POST':
         return redirect(url_for('thank_you'))
-    return render_template('questionnaire.html')
+    else:
+        teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
+        courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
+        students = db.execute('SELECT student_id, student_name FROM student').fetchall()
+        return render_template('questionnaire.html', teachers=teachers, courses=courses, students=students)
+
 
 
 
