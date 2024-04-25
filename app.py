@@ -32,12 +32,17 @@ def home():
 def questionnaire():
     db = get_db()
     if request.method == 'POST':
+        # Here you will handle form submission and save data to the database
+        # Example: Process the received data and potentially return a thank you page
         return redirect(url_for('thank_you'))
     else:
+        # Fetch data from database to populate form
         teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
         courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
         students = db.execute('SELECT student_id, student_name FROM student').fetchall()
+        # You may want to fetch students again or structure differently for preferences
         return render_template('questionnaire.html', teachers=teachers, courses=courses, students=students)
+
 
 
 
