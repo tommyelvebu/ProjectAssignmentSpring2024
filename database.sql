@@ -55,7 +55,6 @@ INSERT INTO course (course_name) VALUES
 ('Gym');
 
 
-
 INSERT INTO class (class_name, teacher_id) VALUES 
 ('1A', 1), 
 ('1B', 2), 

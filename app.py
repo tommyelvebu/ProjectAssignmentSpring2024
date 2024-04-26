@@ -34,6 +34,11 @@ def questionnaire():
         preferred2 = request.form.get('preferred2')
         preferred3 = request.form.get('preferred3')
 
+        existing_submission = db.execute('SELECT * FROM preference WHERE student_id = ?', (student_id,)).fetchone()
+        if existing_submission:
+            flash('You have already submitted this form. Multiple submissions are not allowed.', 'error')
+            return redirect(url_for('questionnaire'))
+
         student_class = db.execute('SELECT class_id FROM student WHERE student_id = ?', (student_id,)).fetchone()
         teacher_class = db.execute('SELECT class_id FROM class WHERE teacher_id = ?', (teacher_id,)).fetchone()
 
@@ -55,11 +60,10 @@ def questionnaire():
                        (student_id, course_id, preferred3))
             db.commit()
         except sqlite3.IntegrityError as e:
-            flash('There was an error saving your preferences. Please try again.', 'error')
+            flash('There was an error saving your preferences. Please fill out all fields', 'error')
             return redirect(url_for('questionnaire'))
-
-        flash('Thank you for submitting your preferences!', 'success')
         return redirect(url_for('thank_you_page'))
+    
     else:
         students = db.execute('SELECT student_id, student_name FROM student').fetchall()
         teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
