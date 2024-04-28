@@ -37,17 +37,12 @@ def questionnaire():
         courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
         return render_template('questionnaire.html', students=students, teachers=teachers, courses=courses)
 
-# In preferred_1 route
 @app.route('/preferred_1', methods=['GET', 'POST'])
 def preferred_1():
     db = get_db()
     if request.method == 'POST':
         session['preferred1'] = request.form.get('preferred_student_id_1')
-        db.commit()  # Ensure data is committed if needed
-        # Debug print to confirm session data after setting preferred1
-        print("Session data after setting preferred1: ", session)
-        print("Redirecting to preferred_2")
-        return redirect(url_for('preferred_2'))
+        return redirect(url_for('preferred_2'))  # Redirect to the next partner selection
     else:
         student_class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (session['student_id'],)).fetchone()['class_id']
         classmates = db.execute('SELECT student_id, student_name FROM student WHERE class_id = ?', (student_class_id,)).fetchall()
@@ -56,16 +51,12 @@ def preferred_1():
             return redirect(url_for('questionnaire'))
         return render_template('preferred_1.html', classmates=classmates)
 
-# In preferred_2 route
 @app.route('/preferred_2', methods=['GET', 'POST'])
 def preferred_2():
     db = get_db()
     if request.method == 'POST':
         session['preferred2'] = request.form.get('preferred_student_id_2')
-        db.commit()  # Ensure data is committed if needed
-        # Debug print to confirm session data after setting preferred2
-        print("Session data after setting preferred2: ", session)
-        return redirect(url_for('preferred_3'))
+        return redirect(url_for('preferred_3'))  # Redirect to the next partner selection
     else:
         student_class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (session['student_id'],)).fetchone()['class_id']
         classmates = db.execute('SELECT student_id, student_name FROM student WHERE class_id = ?', (student_class_id,)).fetchall()
@@ -79,12 +70,10 @@ def preferred_3():
     db = get_db()
     if request.method == 'POST':
         session['preferred3'] = request.form.get('preferred_student_id_3')
-        print("Preferred 3: ", session['preferred3'])  # Debug print
         return redirect(url_for('finalize_submission'))
     else:
         student_class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (session['student_id'],)).fetchone()['class_id']
         classmates = db.execute('SELECT student_id, student_name FROM student WHERE class_id = ?', (student_class_id,)).fetchall()
-        print("Classmates for Preferred 3: ", classmates)  # Debug print
         if not classmates:
             flash("No classmates available or unable to fetch data.")
             return redirect(url_for('questionnaire'))
@@ -94,13 +83,6 @@ def preferred_3():
 @app.route('/finalize_submission', methods=['GET', 'POST'])
 def finalize_submission():
     db = get_db()
-    # Validate all required session data are present
-    required_keys = ['student_id', 'teacher_id', 'course_id', 'preferred1', 'preferred2', 'preferred3']
-    missing_keys = [key for key in required_keys if key not in session]
-    if missing_keys:
-        flash(f"Missing data: {', '.join(missing_keys)}. Please complete all steps.")
-        return redirect(url_for('questionnaire'))  # Redirect back to start or another appropriate step
-
     try:
         db.execute('''
             INSERT INTO preference (student_id, teacher_id, course_id, preferred_student_id_1, preferred_student_id_2, preferred_student_id_3)
@@ -111,7 +93,6 @@ def finalize_submission():
         flash('There was an error saving your preferences. Please try again.', 'error')
         return redirect(url_for('questionnaire'))
     return redirect(url_for('thank_you_page'))
-
 
 @app.route('/thank_you')
 def thank_you_page():
