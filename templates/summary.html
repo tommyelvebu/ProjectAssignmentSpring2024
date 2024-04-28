@@ -4,7 +4,16 @@
 
 {% block main %}
 <div class="container my-5">
-    <h2>Summary Page</h2>
-    <p>This is a placeholder for the summary information.</p>
+  <h2 class="mb-4">Questionnaire Summary</h2>
+  <div class="list-group">
+    {% for key, value in insights.items() %}
+    <a href="#" class="list-group-item list-group-item-action">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ key }}</h5>
+        <small>{{ value }}</small>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
