@@ -163,9 +163,3 @@ body .center-content {
 .footer-section ul li {
     margin: 0 10px; 
 }
-
-/* Additional styles for controlling visibility of preferred partner divs */
-.preferred-partner {
-    display: none;
-}
-
