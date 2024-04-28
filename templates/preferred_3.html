@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+
+{% block title %}Third Preferred Partner{% endblock %}
+
+{% block main %}
+<div class="container my-5">
+    <div class="form-container">
+        <h2 class="mb-4">Select 3rd Preferred Partner</h2>
+        <form action="{{ url_for('finalize_submission') }}" method="post">
+            <div class="mb-3">
+                <label for="preferred_student_id_3" class="form-label">3rd Preferred Partner</label>
+                <select class="form-select custom-select" id="preferred_student_id_3" name="preferred_student_id_3" required>
+                    <option value="">Select a student</option>
+                    {% for student in classmates %}
+                    <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
