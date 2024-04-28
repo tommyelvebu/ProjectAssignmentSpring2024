@@ -37,16 +37,20 @@ def questionnaire():
         courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
         return render_template('questionnaire.html', students=students, teachers=teachers, courses=courses)
 
-# In preferred_1 route
 @app.route('/preferred_1', methods=['GET', 'POST'])
 def preferred_1():
     db = get_db()
     if request.method == 'POST':
+        # Store selected preferred student for preference 1 in session
         session['preferred1'] = request.form.get('preferred_student_id_1')
-        db.commit()  # Ensure data is committed if needed
-        # Debug print to confirm session data after setting preferred1
-        print("Session data after setting preferred1: ", session)
-        print("Redirecting to preferred_2")
+        db.execute('''
+            INSERT INTO preference (student_id, teacher_id, course_id, preferred_student_id_1)
+            VALUES (?, ?, ?, ?)
+        ''', (session['student_id'], session['teacher_id'], session['course_id'], session['preferred1']))
+        db.commit()
+        # Remove preferred student for preference 1 from classmates options for preference 2
+        student_class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (session['student_id'],)).fetchone()['class_id']
+        classmates = db.execute('SELECT student_id, student_name FROM student WHERE class_id = ? AND student_id != ?', (student_class_id, session['preferred1'])).fetchall()
         return redirect(url_for('preferred_2'))
     else:
         student_class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (session['student_id'],)).fetchone()['class_id']
@@ -56,19 +60,16 @@ def preferred_1():
             return redirect(url_for('questionnaire'))
         return render_template('preferred_1.html', classmates=classmates)
 
-# In preferred_2 route
 @app.route('/preferred_2', methods=['GET', 'POST'])
 def preferred_2():
     db = get_db()
     if request.method == 'POST':
         session['preferred2'] = request.form.get('preferred_student_id_2')
         db.commit()  # Ensure data is committed if needed
-        # Debug print to confirm session data after setting preferred2
-        print("Session data after setting preferred2: ", session)
         return redirect(url_for('preferred_3'))
     else:
         student_class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (session['student_id'],)).fetchone()['class_id']
-        classmates = db.execute('SELECT student_id, student_name FROM student WHERE class_id = ?', (student_class_id,)).fetchall()
+        classmates = db.execute('SELECT student_id, student_name FROM student WHERE class_id = ? AND student_id != ?', (student_class_id, session['preferred1'])).fetchall()
         if not classmates:
             flash("No classmates available or unable to fetch data.")
             return redirect(url_for('questionnaire'))

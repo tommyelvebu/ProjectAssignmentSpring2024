@@ -13,9 +13,11 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    <div class="form-container">
-        <h2 class="mb-4">Questionnaire Form</h2>
-        <form action="{{ url_for('questionnaire') }}" method="post">
+
+    <!-- Div 1: Student, Teacher, and Course selection -->
+    <div id="div1" class="form-container">
+        <h2 class="mb-4">Student Information</h2>
+        <form id="form1">
             <div class="mb-3">
                 <label for="student_id" class="form-label label-style">Student's Name</label>
                 <select class="form-select custom-select" id="student_id" name="student_id" required>
@@ -45,8 +47,78 @@
                     {% endfor %}
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Next</button>
+            <button type="button" class="btn btn-primary" onclick="showDiv('div2')">Next</button>
+        </form>
+    </div>
+
+    <!-- Div 2: Preferred student 1 -->
+    <div id="div2" class="form-container" style="display:none;">
+        <h2 class="mb-4">Select Preferred Student 1</h2>
+        <form id="form2">
+            <!-- Dynamic content based on earlier selection -->
+            <button type="button" class="btn btn-primary" onclick="showDiv('div3')">Next</button>
+        </form>
+    </div>
+
+    <!-- Div 3: Preferred student 2 -->
+    <div id="div3" class="form-container" style="display:none;">
+        <h2 class="mb-4">Select Preferred Student 2</h2>
+        <form id="form3">
+            <!-- Dynamic content based on earlier selection -->
+            <button type="button" class="btn btn-primary" onclick="showDiv('div4')">Next</button>
+        </form>
+    </div>
+
+    <!-- Div 4: Preferred student 3 -->
+    <div id="div4" class="form-container" style="display:none;">
+        <h2 class="mb-4">Select Preferred Student 3</h2>
+        <form id="form4">
+            <!-- Dynamic content based on earlier selection -->
+            <button type="button" class="btn btn-primary" onclick="submitAllForms()">Submit</button>
         </form>
     </div>
 </div>
+
+<script>
+    function showDiv(divId) {
+        // Hide all divs
+        document.getElementById('div1').style.display = 'none';
+        document.getElementById('div2').style.display = 'none';
+        document.getElementById('div3').style.display = 'none';
+        document.getElementById('div4').style.display = 'none';
+
+        // Show the requested div
+        document.getElementById(divId).style.display = 'block';
+    }
+
+    function submitAllForms() {
+    // Create an object to store all form data
+    var formData = {
+        student_id: document.getElementById('student_id').value,
+        teacher_id: document.getElementById('teacher_id').value,
+        course_id: document.getElementById('course_id').value,
+        // Add other form fields as needed
+    };
+
+    // Send the data using Fetch API
+    fetch('/your_submission_route', {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        window.location.href = '/thank_you'; // Redirect to thank you page on success
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+    </script>
+</div>
 {% endblock %}
+
