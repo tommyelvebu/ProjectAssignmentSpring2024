@@ -26,18 +26,20 @@ CREATE TABLE student
   FOREIGN KEY (class_id) REFERENCES class(class_id)
 );
 
-CREATE TABLE preference
-(
-  course_id INTEGER NOT NULL ,
-  student_id INTEGER NOT NULL,
-  prefererence_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  preference_rank INTEGER NOT NULL CHECK (preference_rank IN (1, 2, 3)),
-  UNIQUE (student_id, course_id, preference_rank),
-  FOREIGN KEY (student_id) REFERENCES student(student_id),
-  FOREIGN KEY (course_id) REFERENCES course(course_id)
-);
--- i also added the preferred_student_id directly in the database, referencing student(student_id)
--- this was to have a column to store the student_id of the preferred students
+CREATE TABLE "preference" (
+    preference_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER NOT NULL,
+    course_id INTEGER NOT NULL,
+    preferred_student_id_1 INTEGER NOT NULL,
+    preferred_student_id_2 INTEGER NOT NULL,
+    preferred_student_id_3 INTEGER NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id),
+    FOREIGN KEY (preferred_student_id_1) REFERENCES student(student_id),
+    FOREIGN KEY (preferred_student_id_2) REFERENCES student(student_id),
+    FOREIGN KEY (preferred_student_id_3) REFERENCES student(student_id),
+    UNIQUE (student_id, course_id)
+)
 
 
 
