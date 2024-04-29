@@ -3,17 +3,75 @@
 {% block title %}Summary{% endblock %}
 
 {% block main %}
-<div class="container my-5">
-  <h2 class="mb-4">Questionnaire Summary</h2>
-  <div class="list-group">
-    {% for key, value in insights.items() %}
-    <a href="#" class="list-group-item list-group-item-action">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{ key }}</h5>
-        <small>{{ value }}</small>
+<div class="container-lg my-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <caption class="caption-top">student pairs summary</caption>
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Student name 1</th>
+              <th scope="col">Preferred course</th>
+              <th scope="col">Student name 2</th>
+              <th scope="col">Preferred course 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in student_pairs %}
+            <tr>
+              <td>{{ row['student_name'] }}</td>
+              <td>{{ row['course_name']}}</td> 
+              <td>{{ row['preferred_student_name'] }}</td>
+              <td>{{ row['preferred_student_preferred_course'] }}</td> 
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-    </a>
-    {% endfor %}
+    </div>
+    <div class="container-lg my-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <caption class="caption-top">top 3 most popular students </caption>
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Class</th>
+              <th scope="col">Most popular student</th>
+              <th scope="col">Ranking</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in popular_students %}
+            <tr>
+              <td>{{ row['class_name'] }}</td>
+              <td >{{row['student_name'] }}</td> 
+              <td >{{row['ranking'] }}</td> 
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
+    <div class="container-lg my-3">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <caption class="caption-top">Popularity of Courses </caption>
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Rank</th>
+              <th scope="col">Courses</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in popular_courses %}
+            <tr>
+              <td>{{ row['rank'] }}</td>
+              <td class="text-end">{{ row['course_name'] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
 {% endblock %}
