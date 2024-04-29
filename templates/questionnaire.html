@@ -83,10 +83,15 @@
 
             {% if selected_preferred1 %}
             <div class="mb-3">
+                <label class="form-label">1st Preferred Partner</label>
+                <input type="text" class="form-control" value="{{ selected_preferred1_name }}" readonly>
+                <input type="hidden" name="preferred_student_id_1" value="{{ selected_preferred1 }}">
+            </div>
+            <div class="mb-3">
                 <label for="preferred2" class="form-label">2nd Preferred Partner</label>
                 <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2">
                     <option value="">Select a student</option>
-                    {% for classmate in classmates %}
+                    {% for classmate in preferred2_classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>

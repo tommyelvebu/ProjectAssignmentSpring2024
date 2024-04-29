@@ -26,6 +26,7 @@ def home():
 @app.route('/questionnaire', methods=['GET', 'POST'])
 def questionnaire():
     db = get_db()
+    # Initialize all variables
     selected_teacher = None
     selected_student = None
     selected_teacher_name = None
@@ -34,11 +35,21 @@ def questionnaire():
     selected_course_name = None  
     classmates = []
     students = []
+    selected_preferred1 = None
+    selected_preferred1_name = None
+    preferred2_classmates = []
+    selected_preferred2 = None
+    selected_preferred2_name = None
+    preferred3_classmates = []
+
     if request.method == 'POST':
         teacher_id = request.form.get('teacher_id')
         student_id = request.form.get('student_id')
-        course_id = request.form.get('course_id') 
+        course_id = request.form.get('course_id')
+        preferred1_id = request.form.get('preferred_student_id_1')
+        preferred2_id = request.form.get('preferred_student_id_2')
 
+        # Fetch teacher and student details if selected
         if teacher_id:
             selected_teacher = teacher_id
             teacher_info = db.execute('SELECT teacher_name FROM teacher WHERE teacher_id = ?', (teacher_id,)).fetchone()
@@ -59,17 +70,43 @@ def questionnaire():
                 (student_id, student_id)
             ).fetchall()
 
-        if course_id: 
+        if course_id:
             selected_course = course_id
             course_info = db.execute('SELECT course_name FROM course WHERE course_id = ?', (course_id,)).fetchone()
             selected_course_name = course_info['course_name'] if course_info else 'Course not found'
 
+        if preferred1_id:
+            selected_preferred1 = preferred1_id
+            preferred1_info = db.execute('SELECT student_name FROM student WHERE student_id = ?', (preferred1_id,)).fetchone()
+            selected_preferred1_name = preferred1_info['student_name'] if preferred1_info else 'Student not found'
+            # Fetch potential second preferred partners
+            if selected_student:
+                preferred2_classmates = db.execute(
+                    'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?)',
+                    (student_id, student_id, preferred1_id)
+                ).fetchall()
+
+        if preferred2_id:
+            selected_preferred2 = preferred2_id
+            preferred2_info = db.execute('SELECT student_name FROM student WHERE student_id = ?', (preferred2_id,)).fetchone()
+            selected_preferred2_name = preferred2_info['student_name'] if preferred2_info else 'Student not found'
+            if selected_student:
+                preferred3_classmates = db.execute(
+                    'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?, ?)',
+                    (student_id, student_id, preferred1_id, preferred2_id)
+                ).fetchall()
+
     teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
-    courses = db.execute('SELECT course_id, course_name FROM course').fetchall() 
-    return render_template('questionnaire.html', teachers=teachers, students=students, classmates=classmates, courses=courses, 
-                           selected_teacher=selected_teacher, selected_student=selected_student,
-                           selected_course=selected_course, selected_teacher_name=selected_teacher_name,
-                           selected_student_name=selected_student_name, selected_course_name=selected_course_name)  
+    courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
+
+    return render_template('questionnaire.html', teachers=teachers, students=students, classmates=classmates, courses=courses,
+                           selected_teacher=selected_teacher, selected_student=selected_student, selected_course=selected_course,
+                           selected_teacher_name=selected_teacher_name, selected_student_name=selected_student_name,
+                           selected_course_name=selected_course_name, selected_preferred1=selected_preferred1,
+                           selected_preferred1_name=selected_preferred1_name, preferred2_classmates=preferred2_classmates,
+                           selected_preferred2=selected_preferred2, selected_preferred2_name=selected_preferred2_name,
+                           preferred3_classmates=preferred3_classmates)
+
 
 
 @app.route('/get_students/<int:teacher_id>')
