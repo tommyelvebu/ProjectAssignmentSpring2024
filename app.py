@@ -97,7 +97,56 @@ def get_classmates(student_id):
 
 @app.route('/summary')
 def summary():
-    return render_template('summary.html')
+    cursor = get_db().cursor()
+    cursor.execute(
+        """
+        SELECT s1.student_name, c1.course_name, s2.student_name AS preferred_student_name, c2.course_name AS preferred_student_preferred_course
+        FROM (
+            SELECT p1.student_id, p1.course_id, p2.student_id AS p2_student_id, p2.course_id AS p2_course_id
+            FROM preference AS p1
+            JOIN preference AS p2 
+            ON (p1.preferred_student_id_1=p2.student_id OR p1.preferred_student_id_2=p2.student_id OR p1.preferred_student_id_3=p2.student_id)
+            AND (p1.student_id=p2.preferred_student_id_1 OR p1.student_id=p2.preferred_student_id_2 OR p1.student_id=p2.preferred_student_id_3)
+            WHERE p1.student_id<p2.student_id
+            ) AS a
+        JOIN student s1 ON a.student_id=s1.student_id 
+        JOIN student s2 ON a.P2_student_id=s2.student_id
+        JOIN course c1 ON a.course_id=c1.course_id
+        JOIN course c2 ON a.p2_course_id=c2.course_id
+         """
+             )
+    student_pairs=cursor.fetchall()
+    
+
+    cursor.execute(
+        """
+    SELECT class_name, student_name, ranking
+    FROM(
+        SELECT c.class_name, s.student_name, COUNT(*) AS counts, DENSE_RANK() OVER(PARTITION BY c.class_id ORDER BY COUNT(*) DESC) AS ranking
+        FROM student s
+        JOIN preference p ON p.preferred_student_id_1=s.student_id 
+        JOIN class c ON s.class_id=c.class_id
+        GROUP BY class_name, student_name
+        )
+    WHERE ranking<=3
+        
+        """
+    )
+    popular_students=cursor.fetchall()
+    
+
+    cursor.execute(
+        """
+        SELECT DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS rank, c.course_name
+        FROM course c
+        JOIN preference p ON c.course_id=p.course_id
+        GROUP BY c.course_id, c.course_name
+        ORDER BY COUNT(*) DESC
+        """
+    )
+    popular_courses=cursor.fetchall()
+    
+    return render_template('summary.html', student_pairs=student_pairs, popular_students=popular_students, popular_courses=popular_courses)
 
 @app.route('/thank_you')
 def thank_you_page():
