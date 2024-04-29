@@ -32,6 +32,7 @@ def questionnaire():
     selected_student_name = None
     selected_course = None  
     selected_course_name = None  
+    classmates = []
     students = []
     if request.method == 'POST':
         teacher_id = request.form.get('teacher_id')
@@ -53,6 +54,10 @@ def questionnaire():
             selected_student = student_id
             student_info = db.execute('SELECT student_name FROM student WHERE student_id = ?', (student_id,)).fetchone()
             selected_student_name = student_info['student_name'] if student_info else 'Student not found'
+            classmates = db.execute(
+                'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id != ?',
+                (student_id, student_id)
+            ).fetchall()
 
         if course_id: 
             selected_course = course_id
@@ -61,7 +66,7 @@ def questionnaire():
 
     teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
     courses = db.execute('SELECT course_id, course_name FROM course').fetchall() 
-    return render_template('questionnaire.html', teachers=teachers, students=students, courses=courses, 
+    return render_template('questionnaire.html', teachers=teachers, students=students, classmates=classmates, courses=courses, 
                            selected_teacher=selected_teacher, selected_student=selected_student,
                            selected_course=selected_course, selected_teacher_name=selected_teacher_name,
                            selected_student_name=selected_student_name, selected_course_name=selected_course_name)  
