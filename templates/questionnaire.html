@@ -16,66 +16,97 @@
     <div class="form-container">
         <h2 class="mb-4">Questionnaire Form</h2>
         <form action="{{ url_for('questionnaire') }}" method="post">
+            {% if selected_teacher %}
             <div class="mb-3">
-                <label for="student_id" class="form-label label-style">Student's Name</label>
-                <select class="form-select custom-select" id="student_id" name="student_id">
-                    <option value="">Select a student</option>
-                    {% for student in students %}
-                    <option value="{{ student.student_id }}">{{ student.student_name }}</option>
-                    {% endfor %}
-                </select>
+                <label class="form-label">Homeroom Teacher</label>
+                <input type="text" class="form-control" value="{{ selected_teacher_name }}" readonly>
+                <input type="hidden" name="teacher_id" value="{{ selected_teacher }}">
             </div>
-
+            {% else %}
             <div class="mb-3">
                 <label for="teacher_id" class="form-label">Homeroom Teacher</label>
-                <select class="form-select custom-select" id="teacher_id" name="teacher_id">
+                <select class="form-select custom-select" id="teacher_id" name="teacher_id" onchange="this.form.submit()">
                     <option value="">Select a teacher</option>
                     {% for teacher in teachers %}
                     <option value="{{ teacher.teacher_id }}">{{ teacher.teacher_name }}</option>
                     {% endfor %}
                 </select>
             </div>
+            {% endif %}
 
+            {% if selected_student %}
+            <div class="mb-3">
+                <label class="form-label">Student's Name</label>
+                <input type="text" class="form-control" value="{{ selected_student_name }}" readonly>
+                <input type="hidden" name="student_id" value="{{ selected_student }}">
+            </div>
+            {% elif selected_teacher %}
+            <div class="mb-3">
+                <label for="student_id" class="form-label">Student's Name</label>
+                <select class="form-select custom-select" id="student_id" name="student_id" onchange="this.form.submit()">
+                    <option value="">Select a student</option>
+                    {% for student in students %}
+                    <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            {% if selected_student %}
             <div class="mb-3">
                 <label for="course_id" class="form-label">Favorite Course</label>
-                <select class="form-select custom-select" id="course_id" name="course_id">
-                    <option value="">Select a course</option>
-                    {% for course in courses %}
-                    <option value="{{ course.course_id }}">{{ course.course_name }}</option>
-                    {% endfor %}
-                </select>
+                {% if selected_course %}
+                    <input type="text" class="form-control" value="{{ selected_course_name }}" readonly>
+                    <input type="hidden" name="course_id" value="{{ selected_course }}">
+                {% else %}
+                    <select class="form-select custom-select" id="course_id" name="course_id" onchange="this.form.submit()">
+                        <option value="">Select a course</option>
+                        {% for course in courses %}
+                        <option value="{{ course.course_id }}">{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
             </div>
+            {% endif %}
 
+            {% if selected_course %}
             <div class="mb-3">
                 <label for="preferred1" class="form-label">1st Preferred Partner</label>
-                <select class="form-select custom-select" id="preferred1" name="preferred_student_id_1">
+                <select class="form-select custom-select" id="preferred1" name="preferred_student_id_1" onchange="this.form.submit()">
                     <option value="">Select a student</option>
-                    {% for student in students %}
-                    <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+                    {% for classmate in classmates %}
+                    <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
             </div>
+            {% endif %}
+
+            {% if selected_preferred1 %}
             <div class="mb-3">
                 <label for="preferred2" class="form-label">2nd Preferred Partner</label>
-                <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2">
+                <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2" onchange="this.form.submit()">
                     <option value="">Select a student</option>
-                    {% for student in students %}
-                    <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+                    {% for classmate in classmates %}
+                    <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
             </div>
+            {% endif %}
+
+            {% if selected_preferred2 %}
             <div class="mb-3">
                 <label for="preferred3" class="form-label">3rd Preferred Partner</label>
-                <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3">
+                <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3" onchange="this.form.submit()">
                     <option value="">Select a student</option>
-                    {% for student in students %}
-                    <option value="{{ student.student_id }}">{{ student.student_name }}</option>
+                    {% for classmate in classmates %}
+                    <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
             </div>
+            {% endif %}
 
             <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-</div>
-{% endblock %}
+            </form>
+            </div>
+            </div>
+            {% endblock %}
