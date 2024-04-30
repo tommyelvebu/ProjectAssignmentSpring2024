@@ -41,6 +41,8 @@ def questionnaire():
     selected_preferred2 = None
     selected_preferred2_name = None
     preferred3_classmates = []
+    selected_preferred3 = None
+    selected_preferred3_name = None
 
     if request.method == 'POST':
         teacher_id = request.form.get('teacher_id')
@@ -48,6 +50,7 @@ def questionnaire():
         course_id = request.form.get('course_id')
         preferred1_id = request.form.get('preferred_student_id_1')
         preferred2_id = request.form.get('preferred_student_id_2')
+        preferred3_id = request.form.get('preferred_student_id_3')
 
         # Fetch teacher and student details if selected
         if teacher_id:
@@ -96,6 +99,16 @@ def questionnaire():
                     (student_id, student_id, preferred1_id, preferred2_id)
                 ).fetchall()
 
+        if preferred3_id:
+            selected_preferred3 = preferred3_id
+            preferred3_info = db.execute('select student_name FROM student WHERE student_id = ?', (preferred3_id)).fetchone()
+            selected_preferred3_name = preferred3_info['student_name'] if preferred3_info else 'Student not found'
+            if selected_student:
+                preferred3_classmates = db.execute(
+                    'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?, ?)',
+                    (student_id, student_id, preferred1_id, preferred2_id)
+                ).fetchall()
+                
     teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
     courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
 
@@ -105,7 +118,8 @@ def questionnaire():
                            selected_course_name=selected_course_name, selected_preferred1=selected_preferred1,
                            selected_preferred1_name=selected_preferred1_name, preferred2_classmates=preferred2_classmates,
                            selected_preferred2=selected_preferred2, selected_preferred2_name=selected_preferred2_name,
-                           preferred3_classmates=preferred3_classmates)
+                           preferred3_classmates=preferred3_classmates,
+                           selected_preferred3=selected_preferred3, selected_preferred3_name=selected_preferred3_name,)
 
 
 

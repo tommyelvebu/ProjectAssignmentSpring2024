@@ -72,41 +72,53 @@
             {% if selected_course %}
             <div class="mb-3">
                 <label for="preferred1" class="form-label">1st Preferred Partner</label>
-                <select class="form-select custom-select" id="preferred1" name="preferred_student_id_1">
+                {% if selected_preferred1 %}
+                <input type="text" class="form-control" value="{{ selected_preferred1_name }}" readonly>
+                <input type="hidden" name="preferred_student_id_1" value="{{ selected_preferred1 }}">
+                {% else %}
+                <select class="form-select custom-select" id="preferred1" name="preferred_student_id_1" onchange="this.form.submit()">
                     <option value="">Select a student</option>
                     {% for classmate in classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
+                {% endif %}
             </div>
             {% endif %}
-
+            
+            
             {% if selected_preferred1 %}
             <div class="mb-3">
-                <label class="form-label">1st Preferred Partner</label>
-                <input type="text" class="form-control" value="{{ selected_preferred1_name }}" readonly>
-                <input type="hidden" name="preferred_student_id_1" value="{{ selected_preferred1 }}">
-            </div>
-            <div class="mb-3">
                 <label for="preferred2" class="form-label">2nd Preferred Partner</label>
-                <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2">
+                {% if selected_preferred2 %}
+                <input type="text" class="form-control" value="{{ selected_preferred2_name }}" readonly>
+                <input type="hidden" name="preferred_student_id_2" value="{{ selected_preferred2 }}">
+                {% else %}
+                <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2" onchange="this.form.submit()">
                     <option value="">Select a student</option>
                     {% for classmate in preferred2_classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
+                {% endif %}
             </div>
             {% endif %}
-
+            
+            
             {% if selected_preferred2 %}
             <div class="mb-3">
                 <label for="preferred3" class="form-label">3rd Preferred Partner</label>
-                <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3">
+                {% if selected_preferred3 %}
+                <input type="text" class="form-control" value="{{ selected_preferred3_name }}" readonly>
+                <input type="hidden" name="preferred_student_id_3" value="{{ selected_preferred3 }}">
+                {% else %}
+                <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3" onchange="this.form.submit()">
                     <option value="">Select a student</option>
                     {% for classmate in classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
+                {% endif %}
             </div>
             {% endif %}
 
