@@ -86,7 +86,7 @@ def questionnaire():
             if selected_student:
                 preferred2_classmates = db.execute(
                     'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?)',
-                    (student_id, student_id, preferred1_id)
+                    (student_id, student_id, preferred1_id,)
                 ).fetchall()
 
         if preferred2_id:
@@ -96,17 +96,17 @@ def questionnaire():
             if selected_student:
                 preferred3_classmates = db.execute(
                     'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?, ?)',
-                    (student_id, student_id, preferred1_id, preferred2_id)
+                    (student_id, student_id, preferred1_id, preferred2_id,)
                 ).fetchall()
 
         if preferred3_id:
             selected_preferred3 = preferred3_id
-            preferred3_info = db.execute('select student_name FROM student WHERE student_id = ?', (preferred3_id)).fetchone()
+            preferred3_info = db.execute('select student_name FROM student WHERE student_id = ?', (preferred3_id,)).fetchone()
             selected_preferred3_name = preferred3_info['student_name'] if preferred3_info else 'Student not found'
             if selected_student:
                 preferred3_classmates = db.execute(
                     'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?, ?)',
-                    (student_id, student_id, preferred1_id, preferred2_id)
+                    (student_id, student_id, preferred2_id, preferred3_id,)
                 ).fetchall()
                 
     teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
