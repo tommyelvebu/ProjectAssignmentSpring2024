@@ -114,7 +114,7 @@
                 {% else %}
                 <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3" onchange="this.form.submit()">
                     <option value="">Select a student</option>
-                    {% for classmate in classmates %}
+                    {% for classmate in preferred3_classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
                 </select>
