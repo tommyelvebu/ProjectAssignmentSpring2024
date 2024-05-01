@@ -44,7 +44,7 @@ def questionnaire():
     selected_preferred3 = None
     selected_preferred3_name = None
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'submit' in request.form:
         teacher_id = request.form.get('teacher_id')
         student_id = request.form.get('student_id')
         course_id = request.form.get('course_id')
@@ -108,7 +108,23 @@ def questionnaire():
                     'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?, ?)',
                     (student_id, student_id, preferred2_id, preferred3_id,)
                 ).fetchall()
-                
+
+        if student_id and course_id and preferred1_id and preferred2_id and preferred3_id:
+            cursor = db.cursor()
+            try:
+                cursor.execute("INSERT INTO preference (student_id, course_id, preferred_student_id_1, preferred_student_id_2, preferred_student_id_3) VALUES (?, ?, ?, ?, ?)",
+                (student_id, course_id, preferred1_id, preferred2_id, preferred3_id))
+                db.commit()
+                flash('Data saved successfully!')
+            except sqlite3.IntegrityError:
+                flash('You have already submitted your preferences, you cannot submit again!')
+                db.rollback()
+            except Exception as e:
+                db.rollback()
+                flash('Failed to save data, the error message is: {}'.format(e))
+            cursor.close()
+
+
     teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
     courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
 
