@@ -116,6 +116,8 @@ def questionnaire():
                 (student_id, course_id, preferred1_id, preferred2_id, preferred3_id))
                 db.commit()
                 flash('Data saved successfully!')
+                return redirect(url_for("thank_you_page"))
+            
             except sqlite3.IntegrityError:
                 flash('You have already submitted your preferences, you cannot submit again!')
                 db.rollback()
