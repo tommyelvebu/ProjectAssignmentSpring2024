@@ -61,7 +61,9 @@ def questionnaire():
                 SELECT s.student_id, s.student_name 
                 FROM student s
                 JOIN class c ON s.class_id = c.class_id
-                WHERE c.teacher_id = ?
+                WHERE c.teacher_id = ? AND s.student_id NOT IN (
+                    SELECT p.student_id FROM preference p
+                )
             ''', (teacher_id,)).fetchall()
 
         if student_id:
@@ -82,7 +84,6 @@ def questionnaire():
             selected_preferred1 = preferred1_id
             preferred1_info = db.execute('SELECT student_name FROM student WHERE student_id = ?', (preferred1_id,)).fetchone()
             selected_preferred1_name = preferred1_info['student_name'] if preferred1_info else 'Student not found'
-            # Fetch potential second preferred partners
             if selected_student:
                 preferred2_classmates = db.execute(
                     'SELECT student_id, student_name FROM student WHERE class_id = (SELECT class_id FROM student WHERE student_id = ?) AND student_id NOT IN (?, ?)',
@@ -101,7 +102,7 @@ def questionnaire():
 
         if preferred3_id:
             selected_preferred3 = preferred3_id
-            preferred3_info = db.execute('select student_name FROM student WHERE student_id = ?', (preferred3_id,)).fetchone()
+            preferred3_info = db.execute('SELECT student_name FROM student WHERE student_id = ?', (preferred3_id,)).fetchone()
             selected_preferred3_name = preferred3_info['student_name'] if preferred3_info else 'Student not found'
             if selected_student:
                 preferred3_classmates = db.execute(
@@ -126,7 +127,6 @@ def questionnaire():
                 flash('Failed to save data, the error message is: {}'.format(e))
             cursor.close()
 
-
     teachers = db.execute('SELECT teacher_id, teacher_name FROM teacher').fetchall()
     courses = db.execute('SELECT course_id, course_name FROM course').fetchall()
 
@@ -139,30 +139,6 @@ def questionnaire():
                            preferred3_classmates=preferred3_classmates,
                            selected_preferred3=selected_preferred3, selected_preferred3_name=selected_preferred3_name,)
 
-
-
-@app.route('/get_students/<int:teacher_id>')
-def get_students(teacher_id):
-    db = get_db()
-    students = db.execute('''
-        SELECT s.student_id, s.student_name 
-        FROM student s
-        JOIN class c ON s.class_id = c.class_id
-        WHERE c.teacher_id = ?
-    ''', (teacher_id,)).fetchall()
-    return {'students': [dict(student) for student in students]}
-
-@app.route('/get_classmates/<int:student_id>')
-def get_classmates(student_id):
-    db = get_db()
-    class_id = db.execute('SELECT class_id FROM student WHERE student_id = ?', (student_id,)).fetchone()
-    if class_id:
-        classmates = db.execute(
-            'SELECT student_id, student_name FROM student WHERE class_id = ? AND student_id != ?',
-            (class_id['class_id'], student_id)
-        ).fetchall()
-        return {'classmates': [dict(classmate) for classmate in classmates]}
-    return {'classmates': []}
 
 @app.route('/summary')
 def summary():

@@ -122,7 +122,13 @@
             </div>
             {% endif %}
 
-            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+            <button type="submit" class="btn btn-primary" name="submit">
+                {% if not selected_preferred3 %}
+                Next
+                {% else %}
+                Submit
+                {% endif %}
+            </button>
         </form>
     </div>
 </div>
