@@ -25,8 +25,8 @@
             {% else %}
             <div class="mb-3">
                 <label for="teacher_id" class="form-label">Homeroom Teacher</label>
-                <select class="form-select custom-select" id="teacher_id" name="teacher_id" onchange="this.form.submit()">
-                    <option value="">Select a teacher</option>
+                <select class="form-select custom-select" id="teacher_id" name="teacher_id">
+                    <option value="" selected>Select a teacher</option>
                     {% for teacher in teachers %}
                     <option value="{{ teacher.teacher_id }}">{{ teacher.teacher_name }}</option>
                     {% endfor %}
@@ -43,8 +43,8 @@
             {% elif selected_teacher %}
             <div class="mb-3">
                 <label for="student_id" class="form-label">Student's Name</label>
-                <select class="form-select custom-select" id="student_id" name="student_id" onchange="this.form.submit()">
-                    <option value="">Select a student</option>
+                <select class="form-select custom-select" id="student_id" name="student_id">
+                    <option value="" selected>Select a student</option>
                     {% for student in students %}
                     <option value="{{ student.student_id }}">{{ student.student_name }}</option>
                     {% endfor %}
@@ -59,8 +59,8 @@
                     <input type="text" class="form-control" value="{{ selected_course_name }}" readonly>
                     <input type="hidden" name="course_id" value="{{ selected_course }}">
                 {% else %}
-                    <select class="form-select custom-select" id="course_id" name="course_id" onchange="this.form.submit()">
-                        <option value="">Select a course</option>
+                    <select class="form-select custom-select" id="course_id" name="course_id">
+                        <option value="" selected>Select a course</option>
                         {% for course in courses %}
                         <option value="{{ course.course_id }}">{{ course.course_name }}</option>
                         {% endfor %}
@@ -76,8 +76,8 @@
                 <input type="text" class="form-control" value="{{ selected_preferred1_name }}" readonly>
                 <input type="hidden" name="preferred_student_id_1" value="{{ selected_preferred1 }}">
                 {% else %}
-                <select class="form-select custom-select" id="preferred1" name="preferred_student_id_1" onchange="this.form.submit()">
-                    <option value="">Select a student</option>
+                <select class="form-select custom-select" id="preferred1" name="preferred_student_id_1">
+                    <option value="" selected>Select a student</option>
                     {% for classmate in classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
@@ -94,8 +94,8 @@
                 <input type="text" class="form-control" value="{{ selected_preferred2_name }}" readonly>
                 <input type="hidden" name="preferred_student_id_2" value="{{ selected_preferred2 }}">
                 {% else %}
-                <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2" onchange="this.form.submit()">
-                    <option value="">Select a student</option>
+                <select class="form-select custom-select" id="preferred2" name="preferred_student_id_2">
+                    <option value="" selected>Select a student</option>
                     {% for classmate in preferred2_classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
@@ -112,8 +112,8 @@
                 <input type="text" class="form-control" value="{{ selected_preferred3_name }}" readonly>
                 <input type="hidden" name="preferred_student_id_3" value="{{ selected_preferred3 }}">
                 {% else %}
-                <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3" onchange="this.form.submit()">
-                    <option value="">Select a student</option>
+                <select class="form-select custom-select" id="preferred3" name="preferred_student_id_3">
+                    <option value="" selected>Select a student</option>
                     {% for classmate in preferred3_classmates %}
                     <option value="{{ classmate.student_id }}">{{ classmate.student_name }}</option>
                     {% endfor %}
@@ -132,4 +132,21 @@
         </form>
     </div>
 </div>
+
+<!-- Include the JavaScript file -->
+<script src="/static/js/scripts.js"></script>
+
+<!-- Call the function to submit the form when select element's value changes -->
+<script>
+    // Call the function for the select element with id "teacher_id"
+    window.onload = function() {
+        submitFormOnChange('teacher_id');
+        submitFormOnChange('student_id');
+        submitFormOnChange('course_id');
+        submitFormOnChange('preferred1');
+        submitFormOnChange('preferred2');
+        submitFormOnChange('preferred3');
+    };
+</script>
+
 {% endblock %}
