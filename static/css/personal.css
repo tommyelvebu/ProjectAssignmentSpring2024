@@ -178,3 +178,8 @@ body .center-content {
    max-height: 50vh;
    object-fit: contain;
 }
+
+.caption-top {
+   font-size: 24px; 
+   font-weight: bold; 
+}

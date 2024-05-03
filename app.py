@@ -165,18 +165,16 @@ def summary():
 
     cursor.execute(
         """
-    SELECT class_name, student_name, ranking
+    SELECT class_name, student_name, row
     FROM(
-        SELECT c.class_name, s.student_name, COUNT(*) AS counts, DENSE_RANK() OVER(PARTITION BY c.class_id ORDER BY COUNT(*) DESC) AS ranking
+        SELECT c.class_name, s.student_name, COUNT(*) AS counts, ROW_NUMBER() OVER(PARTITION BY c.class_id ORDER BY COUNT(*) DESC) AS row
         FROM student s
         JOIN preference p ON p.preferred_student_id_1=s.student_id 
         JOIN class c ON s.class_id=c.class_id
         GROUP BY class_name, student_name
         )
-    WHERE ranking<=3
-        
-        """
-    )
+    WHERE row<=3
+        """)
     popular_students=cursor.fetchall()
     
 
@@ -190,7 +188,7 @@ def summary():
         """
     )
     popular_courses=cursor.fetchall()
-    
+    cursor.close()
     return render_template('summary.html', student_pairs=student_pairs, popular_students=popular_students, popular_courses=popular_courses)
 
 @app.route('/thank_you')
