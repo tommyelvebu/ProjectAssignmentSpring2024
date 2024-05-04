@@ -7,6 +7,9 @@
   <h2>Thank You!</h2>
   <img src="{{ url_for('static', filename='images/thankyou.gif') }}" alt="Thank You" class="responsive-img">
   <p class="lead">We appreciate you taking the time to complete our questionnaire.</p>
-  <a href="{{ url_for('home') }}" class="btn btn-primary">Return Home</a>
+  <div class="button-container">
+    <a href="{{ url_for('home') }}" class="btn btn-primary">Return Home</a>
+    <a href="{{ url_for('summary') }}" class="btn btn-primary">View Summary</a>
+  </div>
 </div>
 {% endblock %}

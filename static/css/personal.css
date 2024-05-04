@@ -183,3 +183,10 @@ body .center-content {
    font-size: 24px; 
    font-weight: bold; 
 }
+
+.button-container {
+   display: flex;
+   justify-content: center;
+   gap: 20px;
+   margin-top: 20px;
+}
