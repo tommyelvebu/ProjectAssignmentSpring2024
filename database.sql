@@ -41,8 +41,6 @@ CREATE TABLE "preference" (
     UNIQUE (student_id, course_id)
 );
 
-
-
 INSERT INTO teacher (teacher_name) VALUES 
 ('Lei Chang'), 
 ('Amina Mohammed'), 
@@ -69,3 +67,5 @@ INSERT INTO student (student_name, class_id) VALUES
 ('Femi Hassan', 2), ('Emil Iversen', 2), ('Hye Jin Lee', 2), ('Amara Chibuzo', 2), ('Lily Andersen', 2),
 ('Suki Moto', 3), ('Isioma Jelani', 3), ('Mathias Hovde', 3), ('Yuki Tanaka', 3), ('Makena Onyango', 3),
 ('Sade Folami', 3), ('Ella Halvorsen', 3), ('Mei Lin', 3), ('Thea Fosse', 3), ('Lucas Moe', 3);
+
+--> we also added 30 more students directly into the database.db file through an sqlite3 editor extention <-- 
