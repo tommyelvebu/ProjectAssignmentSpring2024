@@ -27,19 +27,19 @@ CREATE TABLE student
 );
 
 CREATE TABLE "preference" (
-    preference_id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
     preferred_student_id_1 INTEGER NOT NULL,
     preferred_student_id_2 INTEGER NOT NULL,
     preferred_student_id_3 INTEGER NOT NULL,
+    PRIMARY KEY (student_id, course_id),
     FOREIGN KEY (student_id) REFERENCES student(student_id),
     FOREIGN KEY (course_id) REFERENCES course(course_id),
     FOREIGN KEY (preferred_student_id_1) REFERENCES student(student_id),
     FOREIGN KEY (preferred_student_id_2) REFERENCES student(student_id),
     FOREIGN KEY (preferred_student_id_3) REFERENCES student(student_id),
     UNIQUE (student_id, course_id)
-)
+);
 
 
 
