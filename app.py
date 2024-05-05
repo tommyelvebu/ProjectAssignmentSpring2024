@@ -119,9 +119,9 @@ def questionnaire():
                 flash('Data saved successfully!')
                 return redirect(url_for("thank_you_page"))
             
-            except sqlite3.IntegrityError:
+            except sqlite3.IntegrityError: # added error handling for duplicate submission, it is unlikely to happen but just in case
                 flash('You have already submitted your preferences, you cannot submit again!')
-                db.rollback()
+                db.rollback() 
             except Exception as e:
                 db.rollback()
                 flash('Failed to save data, the error message is: {}'.format(e))
